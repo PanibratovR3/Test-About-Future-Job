@@ -1,0 +1,10 @@
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 7px 0;
+}
+
+.form-row input {
+    min-width: 200px;
+}
