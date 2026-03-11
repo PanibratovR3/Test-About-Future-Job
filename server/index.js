@@ -2,6 +2,7 @@ const express = require("express");
 const { TelegramClient } = require("telegram");
 const { StringSession } = require("telegram/sessions");
 const cors = require("cors");
+const queries = require("./db/queries");
 
 require("dotenv").config({ quiet: true });
 
@@ -58,13 +59,34 @@ app.post("/api/applicants/login", async (request, response) => {
       phoneNumber: async () => applicantPhoneNumber,
       password: async () => applicantPassword,
       phoneCode: async () => applicantPhoneCode,
-      onError: (error) => {
+      onError: async (error) => {
         if (error.message === "Password is empty") {
           client.destroy();
-          return response.json({
-            success: true,
-            message: "Реєструємо користувача без пароля.",
-          });
+          const existingApplicant =
+            await queries.getApplicantByPhone(applicantPhoneNumber);
+          if (existingApplicant.length > 0) {
+            return response.json({
+              success: true,
+              applicantId: existingApplicant[0].id,
+              studyingStatus: existingApplicant[0].studyingstatus,
+              hasCompletedTest: existingApplicant[0].hascompletedtest,
+            });
+          } else {
+            const newApplicant =
+              await queries.createApplicantWithNonValidPhoneNumber(
+                applicantFullName,
+                applicantPhoneNumber,
+                applicantDateOfBirth,
+                applicantCity,
+                applicantSchool,
+                applicantStudyingStatus,
+              );
+            return response.json({
+              success: true,
+              applicantId: newApplicant[0].id,
+              studyingStatus: newApplicant[0].studyingstatus,
+            });
+          }
         } else {
           client.destroy();
           return response.json({
@@ -77,10 +99,30 @@ app.post("/api/applicants/login", async (request, response) => {
     const isUserAuthorized = await client.isUserAuthorized();
     if (isUserAuthorized) {
       client.destroy();
-      return response.json({
-        success: true,
-        message: "Реєструємо користувача з паролем.",
-      });
+      const existingApplicant =
+        await queries.getApplicantByPhone(applicantPhoneNumber);
+      if (existingApplicant.length > 0) {
+        return response.json({
+          success: true,
+          applicantId: existingApplicant[0].id,
+          studyingStatus: existingApplicant[0].studyingstatus,
+          hasCompletedTest: existingApplicant[0].hascompletedtest,
+        });
+      } else {
+        const newApplicant = await queries.createApplicantWithValidPhoneNumber(
+          applicantFullName,
+          applicantPhoneNumber,
+          applicantDateOfBirth,
+          applicantCity,
+          applicantSchool,
+          applicantStudyingStatus,
+        );
+        return response.json({
+          success: true,
+          applicantId: newApplicant[0].id,
+          studyingStatus: newApplicant[0].studyingstatus,
+        });
+      }
     }
   } catch (error) {
     console.log(error.message);

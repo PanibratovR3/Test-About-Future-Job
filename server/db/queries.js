@@ -32,7 +32,7 @@ async function createApplicantWithNonValidPhoneNumber(
   studyingStatus,
 ) {
   const { rows } = await pool.query(
-    "INSERT INTO applicants(fullname, phonenumber, dateofbirth, city, school, studyingstatus) VALUES($1, $2, $3, $4, $5, $6)",
+    "INSERT INTO applicants(fullname, phonenumber, dateofbirth, city, school, studyingstatus) VALUES($1, $2, $3, $4, $5, $6) RETURNING id, studyingstatus;",
     [fullName, phoneNumber, dateOfBirth, city, school, studyingStatus],
   );
   return rows;
