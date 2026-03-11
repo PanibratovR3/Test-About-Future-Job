@@ -25,10 +25,18 @@ function Login() {
   const handlePasswordInputChange = (event) => {
     setPassword(event.target.value);
   };
+  // function handleSubmit() {
+
+  // }
   return (
     <div>
+      <div className="information">
+        <span className="required">*</span> - обов'язковe до заповнення
+      </div>
       <div className="form-row">
-        <label htmlFor="fullName">ПІБ: </label>
+        <label htmlFor="fullName">
+          ПІБ:<span className="required">*</span>{" "}
+        </label>
         <input
           id="fullName"
           name="fullName"
@@ -38,7 +46,9 @@ function Login() {
         />
       </div>
       <div className="form-row">
-        <label htmlFor="phoneNumber">Номер телефону:</label>
+        <label htmlFor="phoneNumber">
+          Номер телефону:<span className="required">*</span>
+        </label>
         <PhoneInput
           id="phoneNumber"
           placeholder="0XX XXX XXXX"
@@ -50,7 +60,9 @@ function Login() {
         />
       </div>
       <div className="form-row">
-        <label htmlFor="dateOfBirth">Дата народження: </label>
+        <label htmlFor="dateOfBirth">
+          Дата народження:<span className="required">*</span>{" "}
+        </label>
         <input
           type="date"
           id="dateOfBirth"
@@ -61,7 +73,9 @@ function Login() {
         />
       </div>
       <div className="form-row">
-        <label htmlFor="city">Місто: </label>
+        <label htmlFor="city">
+          Місто:<span className="required">*</span>{" "}
+        </label>
         <input
           id="city"
           name="city"
@@ -70,7 +84,10 @@ function Login() {
         />
       </div>
       <div className="form-row">
-        <label htmlFor="school">Школа, де ви навчалися (навчаєтесь): </label>
+        <label htmlFor="school">
+          Школа, де ви навчалися (навчаєтесь):
+          <span className="required">*</span>{" "}
+        </label>
         <input
           id="school"
           name="school"
@@ -79,7 +96,9 @@ function Login() {
         />
       </div>
       <div className="form-row">
-        <label htmlFor="studyingStatus">Статус навчання</label>
+        <label htmlFor="studyingStatus">
+          Статус навчання:<span className="required">*</span>
+        </label>
         <select
           value={requiredFormInputs.studyingStatus}
           onChange={handleRequiredFormInputChange}
@@ -110,6 +129,10 @@ function Login() {
           onChange={handlePasswordInputChange}
         />
       </div>
+      <div className="error-field"></div>
+      {/* <div className="form-row">
+        <button>Зареєструватися і почати тест</button>
+      </div> */}
     </div>
   );
 }

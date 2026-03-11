@@ -13,6 +13,17 @@
     min-width: 208px;
 }
 
+.error-field {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
+
+.required {
+    color: red;
+}
+
 input, select {
     font-family: inherit;
 }
+
