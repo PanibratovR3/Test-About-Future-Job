@@ -12,6 +12,7 @@ function Login() {
     school: "",
     studyingStatus: "",
   });
+  const [password, setPassword] = useState("");
   const PHONELIMIT = 13;
   const INPUTPHONELIMIT = 12;
   const handleRequiredFormInputChange = (event) => {
@@ -20,6 +21,9 @@ function Login() {
       ...requiredFormInputs,
       [name]: value,
     });
+  };
+  const handlePasswordInputChange = (event) => {
+    setPassword(event.target.value);
   };
   return (
     <div>
@@ -95,6 +99,16 @@ function Login() {
           </option>
           <option value={"Graduated"}>Випускник</option>
         </select>
+      </div>
+      <div className="form-row">
+        <label htmlFor="password">Пароль (необов'язково): </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          value={password}
+          onChange={handlePasswordInputChange}
+        />
       </div>
     </div>
   );

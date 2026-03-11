@@ -12,3 +12,7 @@
 .form-row select {
     min-width: 208px;
 }
+
+input, select {
+    font-family: inherit;
+}
