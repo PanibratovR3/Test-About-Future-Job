@@ -23,6 +23,11 @@
     color: red;
 }
 
+.form-row-button {
+    display: flex;
+    justify-content: center;
+}
+
 input, select {
     font-family: inherit;
 }

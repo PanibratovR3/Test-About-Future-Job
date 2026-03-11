@@ -12,6 +12,8 @@ function Login() {
     school: "",
     studyingStatus: "",
   });
+  const [allRequiredFieldsNotEmptyFlag, setAllRequiredFieldsNotEmptyFlag] =
+    useState(true);
   const [password, setPassword] = useState("");
   const PHONELIMIT = 13;
   const INPUTPHONELIMIT = 12;
@@ -25,9 +27,13 @@ function Login() {
   const handlePasswordInputChange = (event) => {
     setPassword(event.target.value);
   };
-  // function handleSubmit() {
-
-  // }
+  function handleSubmit() {
+    const checkAllRequiredFields =
+      !!phoneNumber &&
+      phoneNumber.length === PHONELIMIT &&
+      Object.values(requiredFormInputs).every((item) => item.length > 0);
+    setAllRequiredFieldsNotEmptyFlag(checkAllRequiredFields);
+  }
   return (
     <div>
       <div className="information">
@@ -120,7 +126,7 @@ function Login() {
         </select>
       </div>
       <div className="form-row">
-        <label htmlFor="password">Пароль (необов'язково): </label>
+        <label htmlFor="password">Пароль</label>
         <input
           id="password"
           name="password"
@@ -129,10 +135,13 @@ function Login() {
           onChange={handlePasswordInputChange}
         />
       </div>
-      <div className="error-field"></div>
-      {/* <div className="form-row">
-        <button>Зареєструватися і почати тест</button>
-      </div> */}
+      <div className="error-field">
+        {!allRequiredFieldsNotEmptyFlag &&
+          "Усі обов'язкові поля мають бути заповнені."}
+      </div>
+      <div className="form-row-button">
+        <button onClick={handleSubmit}>Зареєструватися і почати тест</button>
+      </div>
     </div>
   );
 }
