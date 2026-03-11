@@ -2,6 +2,7 @@ import "../styles/login.css";
 import { useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -19,6 +20,7 @@ function Login() {
   const PHONELIMIT = 13;
   const INPUTPHONELIMIT = 12;
   const PHONECODELIMIT = 5;
+  const navigate = useNavigate();
   const handleRequiredFormInputChange = (event) => {
     const { name, value } = event.target;
     setRequiredFormInputs({
@@ -81,7 +83,40 @@ function Login() {
             }
             return response.json();
           })
-          .then((response) => console.log(response))
+          .then((response) => {
+            if (response.success) {
+              if (
+                "hasCompletedTest" in response &&
+                !response.hasCompletedTest
+              ) {
+                localStorage.setItem(
+                  "applicantId",
+                  String(response.applicantId),
+                );
+                localStorage.setItem("studyingStatus", response.studyingStatus);
+                navigate("/test");
+              } else if (
+                "hasCompletedTest" in response &&
+                response.hasCompletedTest
+              ) {
+                localStorage.setItem(
+                  "applicantId",
+                  String(response.applicantId),
+                );
+                localStorage.setItem("studyingStatus", response.studyingStatus);
+                navigate("/finish");
+              } else {
+                localStorage.setItem(
+                  "applicantId",
+                  String(response.applicantId),
+                );
+                localStorage.setItem("studyingStatus", response.studyingStatus);
+                navigate("/test");
+              }
+            } else {
+              setServerError(response.reason);
+            }
+          })
           .catch(() => setServerError("Помилка сервера."));
       } else {
         setServerError("Не надано код, отриманого з аккаунту Telegram.");
