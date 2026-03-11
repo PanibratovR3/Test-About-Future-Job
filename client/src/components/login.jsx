@@ -5,28 +5,21 @@ import "react-phone-number-input/style.css";
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [city, setCity] = useState("");
-  const [school, setSchool] = useState("");
-  const [studyingStatus, setStudyingStatus] = useState("");
-
+  const [requiredFormInputs, setRequiredFormInputs] = useState({
+    fullName: "",
+    dateOfBirth: "",
+    city: "",
+    school: "",
+    studyingStatus: "",
+  });
   const PHONELIMIT = 13;
   const INPUTPHONELIMIT = 12;
-  const handleFullNameChange = (event) => {
-    setFullName(event.target.value);
-  };
-  const handleDateOfBirthChange = (event) => {
-    setDateOfBirth(event.target.value);
-  };
-  const handleCityChange = (event) => {
-    setCity(event.target.value);
-  };
-  const handleSchoolChange = (event) => {
-    setSchool(event.target.value);
-  };
-  const handleStudyingStatusChange = (event) => {
-    setStudyingStatus(event.target.value);
+  const handleRequiredFormInputChange = (event) => {
+    const { name, value } = event.target;
+    setRequiredFormInputs({
+      ...requiredFormInputs,
+      [name]: value,
+    });
   };
   return (
     <div>
@@ -35,8 +28,8 @@ function Login() {
         <input
           id="fullName"
           name="fullName"
-          value={fullName}
-          onChange={handleFullNameChange}
+          value={requiredFormInputs.fullName}
+          onChange={handleRequiredFormInputChange}
           placeholder="Іванов Іван Іванович"
         />
       </div>
@@ -44,7 +37,7 @@ function Login() {
         <label htmlFor="phoneNumber">Номер телефону:</label>
         <PhoneInput
           id="phoneNumber"
-          placeholder="Enter phone number"
+          placeholder="0XX XXX XXXX"
           value={phoneNumber}
           name="phoneNumber"
           defaultCountry="UA"
@@ -58,30 +51,36 @@ function Login() {
           type="date"
           id="dateOfBirth"
           name="dateOfBirth"
-          value={dateOfBirth}
-          onChange={handleDateOfBirthChange}
+          value={requiredFormInputs.dateOfBirth}
+          onChange={handleRequiredFormInputChange}
           placeholder="Іванов Іван Іванович"
         />
       </div>
       <div className="form-row">
         <label htmlFor="city">Місто: </label>
-        <input id="city" name="city" value={city} onChange={handleCityChange} />
+        <input
+          id="city"
+          name="city"
+          value={requiredFormInputs.city}
+          onChange={handleRequiredFormInputChange}
+        />
       </div>
       <div className="form-row">
         <label htmlFor="school">Школа, де ви навчалися (навчаєтесь): </label>
         <input
           id="school"
           name="school"
-          value={school}
-          onChange={handleSchoolChange}
+          value={requiredFormInputs.school}
+          onChange={handleRequiredFormInputChange}
         />
       </div>
       <div className="form-row">
         <label htmlFor="studyingStatus">Статус навчання</label>
         <select
-          value={studyingStatus}
-          onChange={handleStudyingStatusChange}
+          value={requiredFormInputs.studyingStatus}
+          onChange={handleRequiredFormInputChange}
           id="studyingStatus"
+          name="studyingStatus"
         >
           <option value={""}>Не обрано</option>
           <option value={"Studying in 6th grade"}>Навчаюсь в 6-му класі</option>

@@ -8,3 +8,7 @@
 .form-row input {
     min-width: 200px;
 }
+
+.form-row select {
+    min-width: 208px;
+}
