@@ -15,8 +15,10 @@ function Login() {
   const [allRequiredFieldsNotEmptyFlag, setAllRequiredFieldsNotEmptyFlag] =
     useState(true);
   const [password, setPassword] = useState("");
+  const [serverError, setServerError] = useState(null);
   const PHONELIMIT = 13;
   const INPUTPHONELIMIT = 12;
+  const PHONECODELIMIT = 5;
   const handleRequiredFormInputChange = (event) => {
     const { name, value } = event.target;
     setRequiredFormInputs({
@@ -33,6 +35,58 @@ function Login() {
       phoneNumber.length === PHONELIMIT &&
       Object.values(requiredFormInputs).every((item) => item.length > 0);
     setAllRequiredFieldsNotEmptyFlag(checkAllRequiredFields);
+    if (checkAllRequiredFields) {
+      fetch("http://localhost:5000/api/applicants/phone-code", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ applicantPhoneNumber: phoneNumber }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Помилка сервера.");
+          }
+          return response.json();
+        })
+        .then((response) => console.log(response))
+        .catch(() => setServerError("Помилка сервера."));
+      const phoneCode = prompt(
+        "На ваш аккаунт було надіслано код з 5 цифр. Введіть його, будь-ласка.",
+      );
+      if (
+        phoneCode &&
+        !isNaN(Number(phoneCode)) &&
+        phoneCode.length === PHONECODELIMIT
+      ) {
+        fetch("http://localhost:5000/api/applicants/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            applicantFullName: requiredFormInputs.fullName,
+            applicantPhoneNumber: phoneNumber,
+            applicantDateOfBirth: requiredFormInputs.dateOfBirth,
+            applicantCity: requiredFormInputs.city,
+            applicantSchool: requiredFormInputs.school,
+            applicantStudyingStatus: requiredFormInputs.studyingStatus,
+            applicantPassword: password,
+            applicantPhoneCode: phoneCode,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Помилка сервера.");
+            }
+            return response.json();
+          })
+          .then((response) => console.log(response))
+          .catch(() => setServerError("Помилка сервера."));
+      } else {
+        setServerError("Не надано код, отриманого з аккаунту Telegram.");
+      }
+    }
   }
   return (
     <div>
@@ -139,6 +193,7 @@ function Login() {
         {!allRequiredFieldsNotEmptyFlag &&
           "Усі обов'язкові поля мають бути заповнені."}
       </div>
+      <div className="server-error-field">{serverError ? serverError : ""}</div>
       <div className="form-row-button">
         <button onClick={handleSubmit}>Зареєструватися і почати тест</button>
       </div>

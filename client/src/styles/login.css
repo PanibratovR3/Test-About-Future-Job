@@ -13,7 +13,7 @@
     min-width: 208px;
 }
 
-.error-field {
+.error-field, .server-error-field {
     text-align: center;
     color: red;
     font-weight: bold;
