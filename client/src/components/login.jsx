@@ -180,7 +180,9 @@ function Login() {
         </select>
       </div>
       <div className="form-row">
-        <label htmlFor="password">Пароль</label>
+        <label htmlFor="password">
+          Пароль (від аккаунту Telegram з метою підтвердження особистості)
+        </label>
         <input
           id="password"
           name="password"
