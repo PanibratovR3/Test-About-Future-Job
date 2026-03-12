@@ -125,9 +125,6 @@ function Login() {
   }
   return (
     <div>
-      <div className="information">
-        <span className="required">*</span> - обов'язковe до заповнення
-      </div>
       <div className="form-row">
         <label htmlFor="fullName">
           ПІБ:<span className="required">*</span>{" "}
@@ -216,7 +213,7 @@ function Login() {
       </div>
       <div className="form-row">
         <label htmlFor="password">
-          Пароль (від аккаунту Telegram з метою підтвердження особистості)
+          Пароль<sup>1</sup>:
         </label>
         <input
           id="password"
@@ -233,6 +230,12 @@ function Login() {
       <div className="server-error-field">{serverError ? serverError : ""}</div>
       <div className="form-row-button">
         <button onClick={handleSubmit}>Зареєструватися і почати тест</button>
+      </div>
+      <div className="information">
+        <span className="required">*</span> - обов'язковe до заповнення
+      </div>
+      <div className="information">
+        1 - від аккаунту Telegram з метою підтвердження особистості
       </div>
     </div>
   );
