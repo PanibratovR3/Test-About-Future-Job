@@ -1,0 +1,51 @@
+.test-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 2.1rem;
+}
+
+.selected-answer {
+    border: 1px solid green;
+    border-radius: 20px;
+    background-color: lightgreen;
+}
+
+.answers-container {
+    width: 78vw;
+}
+
+.answers-container div {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 20px 0;
+    margin: 5px 0;
+}
+
+.answers-container label {
+    font-size: 1.5rem;
+}
+
+.error-not-selected{
+    text-align: center;
+    font-weight: bold;
+    color: red;
+}
+
+.test-question-header {
+    text-align: justify;
+    font-size: 1.3rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.test-submit-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.summary {
+    text-align: center;
+    font-size: 1.1 rem;
+}
