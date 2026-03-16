@@ -129,4 +129,68 @@ app.post("/api/applicants/login", async (request, response) => {
   }
 });
 
+app.patch(
+  "/api/applicants/graduate/test-results/:id",
+  async (request, response) => {
+    try {
+      const { id } = request.params;
+      const {
+        activityScore,
+        socialScore,
+        emotionalStabilityScore,
+        structureScore,
+        leadershipScore,
+        mathScore,
+        physicsScore,
+      } = request.body;
+      await queries.addResultsOfGraduateApplicant(
+        Number(id),
+        mathScore,
+        physicsScore,
+        activityScore,
+        socialScore,
+        emotionalStabilityScore,
+        structureScore,
+        leadershipScore,
+      );
+      response.json({ success: true });
+    } catch (error) {
+      response.json({
+        success: false,
+        reason: "Не вдалося завантажити результати тесту.",
+      });
+    }
+  },
+);
+
+app.patch(
+  "/api/applicants/non-graduate/test-results/:id",
+  async (request, response) => {
+    try {
+      const { id } = request.params;
+      const {
+        activityScore,
+        socialScore,
+        emotionalStabilityScore,
+        structureScore,
+        leadershipScore,
+      } = request.body;
+      await queries.addResultsOfNonGraduateApplicant(
+        Number(id),
+        activityScore,
+        socialScore,
+        emotionalStabilityScore,
+        structureScore,
+        leadershipScore,
+      );
+      response.json({ success: true });
+    } catch (error) {
+      response.json({
+        success: false,
+        reason: "Не вдалося завантажити результати тесту.",
+      });
+    }
+  },
+);
+
 app.listen(process.env.PORT, () => console.log("Sever has been launched."));
