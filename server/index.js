@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const applicantRouter = require("./routes/applicantRouter");
-require("dotenv").config({ quiet: true });
 
 const app = express();
 
