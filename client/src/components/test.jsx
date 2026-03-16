@@ -3,7 +3,12 @@ import { useState, useRef } from "react";
 import questionsAndAnswers from "../data/questionsAndAnswers";
 import weights from "../data/weights";
 function Test() {
-  const applicantsQuestionsAndAnswers = questionsAndAnswers.graduate;
+  const applicantId = Number(localStorage.getItem("applicantId"));
+  const studyingStatus = localStorage.getItem("studyingStatus");
+  const applicantsQuestionsAndAnswers =
+    studyingStatus === "Graduated"
+      ? questionsAndAnswers.graduate
+      : questionsAndAnswers.nonGraduate;
   const [selectedId, setSelectedId] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedFlag, setSelectedFlag] = useState(true);
@@ -14,6 +19,7 @@ function Test() {
     math: "",
     physics: "",
   });
+
   const applicantScore = useRef({
     activity: 0.0,
     social: 0.0,
