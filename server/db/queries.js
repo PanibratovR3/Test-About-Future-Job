@@ -96,10 +96,19 @@ async function addResultsOfNonGraduateApplicant(
   ]);
 }
 
+async function getResultsOfTestOfApplicant(id) {
+  const { rows } = await pool.query(
+    "SELECT activityscore, socialscore, emotionalstabilityscore, structurescore, leadershipscore FROM applcants WHERE id = $1",
+    [id],
+  );
+  return rows[0];
+}
+
 module.exports = {
   getApplicantByPhone,
   createApplicantWithValidPhoneNumber,
   createApplicantWithNonValidPhoneNumber,
   addResultsOfGraduateApplicant,
   addResultsOfNonGraduateApplicant,
+  getResultsOfTestOfApplicant,
 };

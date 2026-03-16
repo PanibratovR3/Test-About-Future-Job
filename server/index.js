@@ -193,4 +193,26 @@ app.patch(
   },
 );
 
+app.get("/api/applicants/test-results/:id", async (request, response) => {
+  try {
+    const { id } = request.params;
+    const results = await queries.getResultsOfTestOfApplicant(Number(id));
+    response.json({
+      success: true,
+      score: {
+        activityScore: results.activityscore,
+        socialScore: results.socialscore,
+        emotionalStabilityScore: results.emotionalstabilityscore,
+        structureScore: results.structurescore,
+        leadershipScore: response.leadershipscore,
+      },
+    });
+  } catch (error) {
+    response.json({
+      success: false,
+      reason: "Не вдалося завантажити результати тесту.",
+    });
+  }
+});
+
 app.listen(process.env.PORT, () => console.log("Sever has been launched."));
