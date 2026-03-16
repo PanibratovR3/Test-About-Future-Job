@@ -2,7 +2,7 @@ import "../styles/test.css";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import questionsAndAnswers from "../data/questionsAndAnswers";
-// import weights from "../data/weights";
+
 function Test() {
   const applicantId = Number(localStorage.getItem("applicantId"));
   const studyingStatus = localStorage.getItem("studyingStatus");
@@ -15,8 +15,6 @@ function Test() {
   const [selectedFlag, setSelectedFlag] = useState(true);
   const [allSubjectInputsFilled, setAllSubjectInputsFilled] = useState(true);
   const [serverErrorText, setServerErrorText] = useState("");
-  // const [showSummaryFlag, setShowSummaryFlag] = useState(false);
-  // const [futureJob, setFutureJob] = useState("");
   const [subjectsFormData, setSubjectsFormData] = useState({
     math: "",
     physics: "",
@@ -30,16 +28,6 @@ function Test() {
     structure: 0.0,
     leadership: 0.0,
   });
-  // const applicantSummaryScore = useRef({
-  //   Backend: 0.0,
-  //   Frontend: 0.0,
-  //   QA: 0.0,
-  //   DevOps: 0.0,
-  //   "Data-Science": 0.0,
-  //   "Data-Engineering": 0.0,
-  //   "Business-Analysis": 0.0,
-  //   "Project-Management": 0.0,
-  // });
   const SUBJECTPOINTSMIN = 1;
   const SUBJECTPOINTSMAX = 12;
   const question = applicantsQuestionsAndAnswers[currentQuestionIndex];
@@ -161,22 +149,6 @@ function Test() {
           })
           .catch((error) => setServerErrorText(error.message));
       }
-      // const applicantTestResults = Object.values(applicantScore.current);
-      // for (let job in applicantSummaryScore.current) {
-      //   applicantSummaryScore.current[job] = applicantTestResults
-      //     .map(
-      //       (item, index) => applicantTestResults[index] * weights[job][index],
-      //     )
-      //     .reduce((sum, item) => sum + item);
-      // }
-      // const jobWinner = Object.keys(applicantSummaryScore.current).reduce(
-      //   (a, b) =>
-      //     applicantSummaryScore.current[a] > applicantSummaryScore.current[b]
-      //       ? a
-      //       : b,
-      // );
-      // setFutureJob(jobWinner);
-      // setShowSummaryFlag(true);
     }
   }
   if (question.trait === "subjects") {
