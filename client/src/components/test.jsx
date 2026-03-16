@@ -93,6 +93,7 @@ function Test() {
         (item) => item.id === selectedId,
       );
       applicantScore.current[question.trait] += selectedAnswer.points;
+      setSelectedId(null);
       if (studyingStatus === "Graduated") {
         fetch(
           `http://localhost:5000/api/applicants/graduate/test-results/${applicantId}`,
