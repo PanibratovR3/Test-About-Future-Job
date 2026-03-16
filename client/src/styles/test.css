@@ -26,7 +26,7 @@
     font-size: 1.5rem;
 }
 
-.error-not-selected, .error-not-filled{
+.error-not-selected, .error-not-filled, .server-error {
     text-align: center;
     font-weight: bold;
     color: red;
