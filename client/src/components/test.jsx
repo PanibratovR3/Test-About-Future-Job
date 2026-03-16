@@ -3,12 +3,17 @@ import { useState, useRef } from "react";
 import questionsAndAnswers from "../data/questionsAndAnswers";
 import weights from "../data/weights";
 function Test() {
-  const applicantsQuestionsAndAnswers = questionsAndAnswers.nonGraduate;
+  const applicantsQuestionsAndAnswers = questionsAndAnswers.graduate;
   const [selectedId, setSelectedId] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedFlag, setSelectedFlag] = useState(true);
+  const [allSubjectInputsFilled, setAllSubjectInputsFilled] = useState(true);
   const [showSummaryFlag, setShowSummaryFlag] = useState(false);
   const [futureJob, setFutureJob] = useState("");
+  const [subjectsFormData, setSubjectsFormData] = useState({
+    math: "",
+    physics: "",
+  });
   const applicantScore = useRef({
     activity: 0.0,
     social: 0.0,
@@ -26,21 +31,44 @@ function Test() {
     "Business-Analysis": 0.0,
     "Project-Management": 0.0,
   });
+  const SUBJECTPOINTSMIN = 1;
+  const SUBJECTPOINTSMAX = 12;
   const question = applicantsQuestionsAndAnswers[currentQuestionIndex];
   const handleAnswerRadioChange = (event) => {
     setSelectedId(event.target.value);
   };
+  const handleSubjectInputChange = (event) => {
+    const { name, value } = event.target;
+    setSubjectsFormData({
+      ...subjectsFormData,
+      [name]: value,
+    });
+  };
   function handleAnswerSubmit() {
-    const checkIsAnswerSelected = !!selectedId;
-    setSelectedFlag(checkIsAnswerSelected);
-    if (checkIsAnswerSelected) {
-      const selectedAnswer = question.answers.find(
-        (item) => item.id === selectedId,
+    if (question.trait === "subjects") {
+      const checkFormDataFilled = Object.values(subjectsFormData).every(
+        (item) =>
+          !!item &&
+          !isNaN(parseInt(item)) &&
+          parseInt(item) >= SUBJECTPOINTSMIN &&
+          parseInt(item) <= SUBJECTPOINTSMAX,
       );
-      applicantScore.current[question.trait] += selectedAnswer.points;
-      setSelectedId(null);
-      if (currentQuestionIndex < applicantsQuestionsAndAnswers.length - 1) {
+      setAllSubjectInputsFilled(checkFormDataFilled);
+      if (checkFormDataFilled) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+    } else {
+      const checkIsAnswerSelected = !!selectedId;
+      setSelectedFlag(checkIsAnswerSelected);
+      if (checkIsAnswerSelected) {
+        const selectedAnswer = question.answers.find(
+          (item) => item.id === selectedId,
+        );
+        applicantScore.current[question.trait] += selectedAnswer.points;
+        setSelectedId(null);
+        if (currentQuestionIndex < applicantsQuestionsAndAnswers.length - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        }
       }
     }
   }
@@ -70,50 +98,92 @@ function Test() {
       setShowSummaryFlag(true);
     }
   }
-  return (
-    <div>
-      <h1>Тест на визначення майбутньої професії.</h1>
-      <div className="test-header">
-        Питання № {currentQuestionIndex + 1} /{" "}
-        {applicantsQuestionsAndAnswers.length}
-      </div>
-      <div className="test-question-header">{question.questionTextOne}</div>
-      <div className="answers-container">
-        {question.answers.map((answer) => {
-          return (
-            <div
-              key={answer.id}
-              className={answer.id === selectedId ? "selected-answer" : ""}
-            >
-              <input
-                id={answer.id}
-                type="radio"
-                value={answer.id}
-                checked={selectedId === answer.id}
-                onChange={handleAnswerRadioChange}
-              />
-              <label htmlFor={answer.id}>{answer.answerText}</label>
-            </div>
-          );
-        })}
-        <div className="test-question-header">{question.questionTextTwo}</div>
-      </div>
-      <div className="test-submit-container">
-        {currentQuestionIndex < applicantsQuestionsAndAnswers.length - 1 ? (
+  if (question.trait === "subjects") {
+    return (
+      <div>
+        <div className="test-main-header">
+          Тест на визначення майбутньої професії.
+        </div>
+        <div className="test-header">
+          Питання № {currentQuestionIndex + 1} /{" "}
+          {applicantsQuestionsAndAnswers.length}
+        </div>
+        <div className="test-subject-header">{question.questionText}</div>
+        <div className="subjects-container">
+          {question.subjects.map((item) => {
+            return (
+              <div className="subjects-row" key={item.id}>
+                <label htmlFor={item.id}>{item.subjectLabelName}:</label>
+                <input
+                  id={item.id}
+                  type="number"
+                  min={SUBJECTPOINTSMIN}
+                  max={SUBJECTPOINTSMAX}
+                  name={item.subjectInputNameAttribute}
+                  value={subjectsFormData[item.subjectInputNameAttribute]}
+                  onChange={handleSubjectInputChange}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="test-submit-container">
           <button onClick={handleAnswerSubmit}>Наступне питання</button>
-        ) : (
-          <button onClick={handleSummarySubmit}>Дізнатися результат</button>
-        )}
+        </div>
+        <div className="error-not-filled">
+          {!allSubjectInputsFilled &&
+            "Усі поля по предметам мають бути заповнені (від 1 до 12) !"}
+        </div>
       </div>
-      <div className="error-not-selected">
-        {!selectedFlag && "Ви маєте обрати відповідь!"}
+    );
+  } else {
+    return (
+      <div>
+        <div className="test-main-header">
+          Тест на визначення майбутньої професії.
+        </div>
+        <div className="test-header">
+          Питання № {currentQuestionIndex + 1} /{" "}
+          {applicantsQuestionsAndAnswers.length}
+        </div>
+        <div className="test-question-header">{question.questionTextOne}</div>
+        <div className="answers-container">
+          {question.answers.map((answer) => {
+            return (
+              <div
+                key={answer.id}
+                className={answer.id === selectedId ? "selected-answer" : ""}
+              >
+                <input
+                  id={answer.id}
+                  type="radio"
+                  value={answer.id}
+                  checked={selectedId === answer.id}
+                  onChange={handleAnswerRadioChange}
+                />
+                <label htmlFor={answer.id}>{answer.answerText}</label>
+              </div>
+            );
+          })}
+          <div className="test-question-header">{question.questionTextTwo}</div>
+        </div>
+        <div className="test-submit-container">
+          {currentQuestionIndex < applicantsQuestionsAndAnswers.length - 1 ? (
+            <button onClick={handleAnswerSubmit}>Наступне питання</button>
+          ) : (
+            <button onClick={handleSummarySubmit}>Дізнатися результат</button>
+          )}
+        </div>
+        <div className="error-not-selected">
+          {!selectedFlag && "Ви маєте обрати відповідь!"}
+        </div>
+        <div className="summary">
+          {showSummaryFlag &&
+            "Ваша майбутня робота: " + futureJob.replaceAll("-", " ") + "."}
+        </div>
       </div>
-      <div className="summary">
-        {showSummaryFlag &&
-          "Ваша майбутня робота: " + futureJob.replaceAll("-", " ") + "."}
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Test;

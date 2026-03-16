@@ -2404,6 +2404,7 @@ const questionsAndAnswers = {
   graduate: [
     {
       trait: "subjects",
+      questionText: "Вкажіть ваші оцінки з предмету згідно вашого атестату.",
       subjects: [
         {
           id: crypto.randomUUID(),
