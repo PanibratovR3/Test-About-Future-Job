@@ -104,7 +104,7 @@ function Login() {
                   String(response.applicantId),
                 );
                 localStorage.setItem("studyingStatus", response.studyingStatus);
-                navigate("/finish");
+                navigate("/results");
               } else {
                 localStorage.setItem(
                   "applicantId",

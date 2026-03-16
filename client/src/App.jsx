@@ -2,7 +2,7 @@ import "./App.css";
 import Login from "./components/login";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Test from "./components/test";
-import Finish from "./components/finish";
+import Results from "./components/results";
 function App() {
   // const router = createBrowserRouter([
   //   {
@@ -14,8 +14,8 @@ function App() {
   //     element: <Test />,
   //   },
   //   {
-  //     path: "/finish",
-  //     element: <Finish />,
+  //     path: "/results",
+  //     element: <Results />,
   //   },
   // ]);
   return (
