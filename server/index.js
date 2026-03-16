@@ -23,7 +23,7 @@ app.get("/api", (request, response) => {
   response.send("API is working.");
 });
 
-app.post("/api/applicants/phone-code", async (request, response) => {
+app.post("/api/applicant/phone-code", async (request, response) => {
   try {
     const { applicantPhoneNumber } = request.body;
     await client.connect();
@@ -43,7 +43,7 @@ app.post("/api/applicants/phone-code", async (request, response) => {
   }
 });
 
-app.post("/api/applicants/login", async (request, response) => {
+app.post("/api/applicant/login", async (request, response) => {
   try {
     const {
       applicantFullName,
@@ -130,7 +130,7 @@ app.post("/api/applicants/login", async (request, response) => {
 });
 
 app.patch(
-  "/api/applicants/graduate/test-results/:id",
+  "/api/applicant/graduate/test-results/:id",
   async (request, response) => {
     try {
       const { id } = request.params;
@@ -164,7 +164,7 @@ app.patch(
 );
 
 app.patch(
-  "/api/applicants/non-graduate/test-results/:id",
+  "/api/applicant/non-graduate/test-results/:id",
   async (request, response) => {
     try {
       const { id } = request.params;
@@ -193,7 +193,7 @@ app.patch(
   },
 );
 
-app.get("/api/applicants/test-results/:id", async (request, response) => {
+app.get("/api/applicant/test-results/:id", async (request, response) => {
   try {
     const { id } = request.params;
     const results = await queries.getResultsOfTestOfApplicant(Number(id));

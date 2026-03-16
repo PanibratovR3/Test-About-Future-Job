@@ -96,7 +96,7 @@ function Test() {
       setSelectedId(null);
       if (studyingStatus === "Graduated") {
         fetch(
-          `http://localhost:5000/api/applicants/graduate/test-results/${applicantId}`,
+          `http://localhost:5000/api/applicant/graduate/test-results/${applicantId}`,
           {
             method: "PATCH",
             headers: {
@@ -130,7 +130,7 @@ function Test() {
           .catch((error) => setServerErrorText(error.message));
       } else {
         fetch(
-          `http://localhost:5000/api/applicants/non-graduate/test-results/${applicantId}`,
+          `http://localhost:5000/api/applicant/non-graduate/test-results/${applicantId}`,
           {
             method: "PATCH",
             headers: {

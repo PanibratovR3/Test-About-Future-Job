@@ -33,7 +33,7 @@ function Results() {
     return { loadingResultsFlag, resultsError };
   }
   const { loadingResultsFlag, resultsError } = useFetchResultsOfTest(
-    `http://localhost:5000/api/applicants/test-results/${applicantId}`,
+    `http://localhost:5000/api/applicant/test-results/${applicantId}`,
   );
   if (loadingResultsFlag) {
     return (

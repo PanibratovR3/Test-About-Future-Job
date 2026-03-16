@@ -38,7 +38,7 @@ function Login() {
       Object.values(requiredFormInputs).every((item) => item.length > 0);
     setAllRequiredFieldsNotEmptyFlag(checkAllRequiredFields);
     if (checkAllRequiredFields) {
-      fetch("http://localhost:5000/api/applicants/phone-code", {
+      fetch("http://localhost:5000/api/applicant/phone-code", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ function Login() {
         !isNaN(Number(phoneCode)) &&
         phoneCode.length === PHONECODELIMIT
       ) {
-        fetch("http://localhost:5000/api/applicants/login", {
+        fetch("http://localhost:5000/api/applicant/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
