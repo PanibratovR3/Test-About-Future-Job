@@ -21,10 +21,10 @@ function Test() {
     Frontend: 0.0,
     QA: 0.0,
     DevOps: 0.0,
-    DataScience: 0.0,
-    DataEngineering: 0.0,
-    BusinessAnalysis: 0.0,
-    ProjectManagement: 0.0,
+    "Data-Science": 0.0,
+    "Data-Engineering": 0.0,
+    "Business-Analysis": 0.0,
+    "Project-Management": 0.0,
   });
   const question = applicantsQuestionsAndAnswers[currentQuestionIndex];
   const handleAnswerRadioChange = (event) => {
@@ -48,6 +48,10 @@ function Test() {
     const checkIsAnswerSelected = !!selectedId;
     setSelectedFlag(checkIsAnswerSelected);
     if (checkIsAnswerSelected) {
+      const selectedAnswer = question.answers.find(
+        (item) => item.id === selectedId,
+      );
+      applicantScore.current[question.trait] += selectedAnswer.points;
       const applicantTestResults = Object.values(applicantScore.current);
       for (let job in applicantSummaryScore.current) {
         applicantSummaryScore.current[job] = applicantTestResults
@@ -105,7 +109,8 @@ function Test() {
         {!selectedFlag && "Ви маєте обрати відповідь!"}
       </div>
       <div className="summary">
-        {showSummaryFlag && "Ваша майбутня робота: " + futureJob + " ."}
+        {showSummaryFlag &&
+          "Ваша майбутня робота: " + futureJob.replaceAll("-", " ") + "."}
       </div>
     </div>
   );
