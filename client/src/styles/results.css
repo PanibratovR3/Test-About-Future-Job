@@ -1,0 +1,17 @@
+.results-main-header {
+    font-weight: bold;
+    font-size: 3rem;
+    padding: 20px 0;
+}
+
+.results-job-winner-text {
+    font-style: italic;
+    font-size: 1.4rem;
+}
+
+.results-server-error {
+    text-align: center;
+    font-weight: bold;
+    color: red;
+    font-size: 3rem;
+}

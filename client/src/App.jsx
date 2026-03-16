@@ -4,24 +4,23 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Test from "./components/test";
 import Results from "./components/results";
 function App() {
-  // const router = createBrowserRouter([
-  //   {
-  //     path: "/",
-  //     element: <Login />,
-  //   },
-  //   {
-  //     path: "/test",
-  //     element: <Test />,
-  //   },
-  //   {
-  //     path: "/results",
-  //     element: <Results />,
-  //   },
-  // ]);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Login />,
+    },
+    {
+      path: "/test",
+      element: <Test />,
+    },
+    {
+      path: "/results",
+      element: <Results />,
+    },
+  ]);
   return (
     <div>
-      <Test />
-      {/* <RouterProvider router={router} /> */}
+      <RouterProvider router={router} />
     </div>
   );
 }

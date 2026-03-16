@@ -200,17 +200,17 @@ app.get("/api/applicants/test-results/:id", async (request, response) => {
     response.json({
       success: true,
       score: {
-        activityScore: results.activityscore,
-        socialScore: results.socialscore,
-        emotionalStabilityScore: results.emotionalstabilityscore,
-        structureScore: results.structurescore,
-        leadershipScore: response.leadershipscore,
+        activityScore: Number(results.activityscore),
+        socialScore: Number(results.socialscore),
+        emotionalStabilityScore: Number(results.emotionalstabilityscore),
+        structureScore: Number(results.structurescore),
+        leadershipScore: Number(results.leadershipscore),
       },
     });
   } catch (error) {
     response.json({
       success: false,
-      reason: "Не вдалося завантажити результати тесту.",
+      reason: "Не вдалося завантажити результати тесту. " + error.message,
     });
   }
 });

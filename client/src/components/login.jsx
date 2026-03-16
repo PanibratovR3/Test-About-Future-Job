@@ -51,7 +51,6 @@ function Login() {
           }
           return response.json();
         })
-        .then((response) => console.log(response))
         .catch(() => setServerError("Помилка сервера."));
       const phoneCode = prompt(
         "На ваш аккаунт було надіслано код з 5 цифр. Введіть його, будь-ласка.",
