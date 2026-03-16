@@ -38,8 +38,68 @@ async function createApplicantWithNonValidPhoneNumber(
   return rows;
 }
 
+async function addResultsOfGraduateApplicant(
+  id,
+  mathScore,
+  physicsScore,
+  activityScore,
+  socialScore,
+  emotionalStabilityScore,
+  structureScore,
+  leadershipScore,
+) {
+  const query = `UPDATE applicants
+                    SET hascompletedtest = true,
+                        activityscore = $1,
+                        socialscore = $2,
+                        emotionalstabilityscore = $3,
+                        structurescore = $4,
+                        leadershipscore = $5,
+                        mathscore = $6,
+                        physicsscore = $7
+                    WHERE id = $8`;
+  await pool.query(query, [
+    activityScore,
+    socialScore,
+    emotionalStabilityScore,
+    structureScore,
+    leadershipScore,
+    mathScore,
+    physicsScore,
+    id,
+  ]);
+}
+
+async function addResultsOfNonGraduateApplicant(
+  id,
+  activityScore,
+  socialScore,
+  emotionalStabilityScore,
+  structureScore,
+  leadershipScore,
+) {
+  const query = `UPDATE applicants
+                  SET hascompletedtest = true,
+                      activityscore = $1,
+                      socialscore = $2,
+                      emotionalstabilityscore = $3,
+                      structurescore = $4,
+                      leadershipscore = $5
+                  WHERE id = $6`;
+  await pool.query(query, [
+    activityScore,
+    socialScore,
+    emotionalStabilityScore,
+    structureScore,
+    leadershipScore,
+    id,
+  ]);
+}
+
 module.exports = {
   getApplicantByPhone,
   createApplicantWithValidPhoneNumber,
   createApplicantWithNonValidPhoneNumber,
+  addResultsOfGraduateApplicant,
+  addResultsOfNonGraduateApplicant,
 };
