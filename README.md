@@ -46,4 +46,4 @@ Database contains only one table **applicants**, which includes next columns:
 15. **mathscore**: points from math, according to school certificate, integer type.
 16. **physicsscore**: points from physics, according to school certificate, integer type.
 
-For information about climent information check [here](./client/README.md).
+For information about client implementation check [here](./client/README.md).
