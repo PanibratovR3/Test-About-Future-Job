@@ -47,4 +47,14 @@ Database contains only one table **applicants**, which includes next columns:
 15. **mathscore**: points from math, according to school certificate, integer type.
 16. **physicsscore**: points from physics, according to school certificate, integer type.
 
+`.env` file must contain next parameters:  
+
+* _*API_ID*_: ID of the API, which is used for communication with Telegram, integer type;
+* _*API_HASH*_: hash value of the API, which is used for communication with Telegram, string type;
+* _*DB_USER*_: name of the user of the database, string type;
+* _*DB_PASSWORD*_: password of the database, string type;
+* _*DB_HOST*_: hostname of the database, string type;
+* _*DB_NAME*_: name of the database, string type;
+* _*PORT*_: number of port, which is used for listening, integer type.
+
 For information about client implementation check [here](./client/README.md).
