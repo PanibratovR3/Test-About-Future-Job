@@ -1,7 +1,7 @@
 # Test-About-Future-Job (Client side)
 
 This part was implemented by using _*React*_ library.
-The site contains nex components:  
+The site contains next components:  
 
 1. **Login**: applicants enter their credential before starting the test.
 2. **Test**: applicants completing the test according to their studying status.

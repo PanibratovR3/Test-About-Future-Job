@@ -19,7 +19,7 @@ Test for applicants, who are studying at school, contains 75 questions and other
 
 After completing the test metrics points (and both math and physics points in case of graduated status) are written to the database. Applicant is redirected to results page, where results of test are multiplied with weights of possible jobs. Job, which gets maximum value, will be the future one for applicant with description about it and recommendation about department enrolling.
 
-Server side of this site implemented by using the next packages:  
+Server side of this site was implemented by using the next packages:  
 
 * _*express*_: for building web applications and APIs;
 * _*dotenv*_: for working with environmental variables;
@@ -27,7 +27,7 @@ Server side of this site implemented by using the next packages:
 * _*pg*_: for communication with PostgreSQL databse;
 * _*telegram*_:  a Telegram client for Node.js.
 
-Database contains only one table **applicants**, which includes nex columns:  
+Database contains only one table **applicants**, which includes next columns:  
 
 1. **id**: id of the applicant, integer type, generated automatically.
 2. **fullname**: full name of the applicant, text type.
