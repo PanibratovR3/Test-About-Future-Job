@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const applicantRouter = require("./routes/applicantRouter");
+const createTable = require("./db/createTable");
 require("dotenv").config({ quiet: true });
+
+createTable();
 
 const app = express();
 
