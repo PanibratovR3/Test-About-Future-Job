@@ -17,4 +17,4 @@ app.get("/api", (request, response) => {
   response.send("API is working.");
 });
 
-app.listen(process.env.PORT, () => console.log("Sever has been launched."));
+app.listen(process.env.PORT, () => console.log("Server has been launched."));
