@@ -35,7 +35,7 @@ function Login() {
     const checkAllRequiredFields =
       !!phoneNumber &&
       phoneNumber.length === PHONELIMIT &&
-      Object.values(requiredFormInputs).every((item) => item.length > 0);
+      Object.values(requiredFormInputs).every((item) => item.trim().length > 0);
     setAllRequiredFieldsNotEmptyFlag(checkAllRequiredFields);
     if (checkAllRequiredFields) {
       fetch("http://localhost:5000/api/applicant/phone-code", {
