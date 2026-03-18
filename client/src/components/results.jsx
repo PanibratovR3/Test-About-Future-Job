@@ -54,14 +54,17 @@ function Results() {
         .map((item, index) => weights[job][index] * item)
         .reduce((previousSum, item) => previousSum + item);
     }
-    const futureJob = Object.keys(futureJobsResult).reduce((a, b) =>
-      futureJobsResult[a] > futureJobsResult[b] ? a : b,
+    const sortedJobsDesc = Object.keys(futureJobsResult).sort(
+      (a, b) => futureJobsResult[b] - futureJobsResult[a],
     );
     return (
       <div>
         <div className="results-main-header">Результати тесту.</div>
         <div className="results-job-winner-text">
-          Ваша майбутня робота: {futureJob.replaceAll("-", " ")}.
+          Ваша майбутня робота: {sortedJobsDesc[0].replaceAll("-", " ")}.
+        </div>
+        <div className="results-job-winner-text">
+          Або: {sortedJobsDesc[1].replaceAll("-", " ")}.
         </div>
       </div>
     );
