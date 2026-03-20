@@ -26,7 +26,7 @@ Server side of this site was implemented by using the next packages:
 * _*dotenv*_: for working with environmental variables;
 * _*cors*_: for setting CORS response headers;
 * _*pg*_: for communication with PostgreSQL databse;
-* _*telegram*_:  a Telegram client for Node.js.
+* _*teleproto*_:  a Telegram client for Node.js (fork of GramJS).
 
 Database contains only one table **applicants**, which includes next columns:  
 
