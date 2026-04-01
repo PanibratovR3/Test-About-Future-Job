@@ -51,7 +51,7 @@ function Login() {
           }
           return response.json();
         })
-        .catch(() => setServerError("Помилка сервера."));
+        .catch((error) => setServerError(error.message));
       const phoneCode = prompt(
         "На ваш аккаунт було надіслано код з 5 цифр. Введіть його, будь-ласка.",
       );
@@ -116,7 +116,7 @@ function Login() {
               setServerError(response.reason);
             }
           })
-          .catch(() => setServerError("Помилка сервера."));
+          .catch((error) => setServerError(error.message));
       } else {
         setServerError("Не надано код, отриманого з аккаунту Telegram.");
       }
