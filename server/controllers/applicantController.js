@@ -4,7 +4,6 @@ const telegram = require("../config/telegram");
 
 async function requestPhoneCode(request, response) {
   try {
-    console.trace();
     const { applicantPhoneNumber } = request.body;
     await telegram.client.sendCode(
       {
@@ -24,7 +23,6 @@ async function requestPhoneCode(request, response) {
 
 async function loginApplicant(request, response) {
   try {
-    console.trace();
     const {
       applicantFullName,
       applicantPhoneNumber,
@@ -42,7 +40,6 @@ async function loginApplicant(request, response) {
       onError: async (error) => {
         if (error.message === "Password is empty") {
           await telegram.client.invoke(new telegram.Api.auth.LogOut({}));
-          // telegram.client.destroy();
           const existingApplicant =
             await queries.getApplicantByPhone(applicantPhoneNumber);
           if (existingApplicant.length > 0) {
@@ -69,7 +66,6 @@ async function loginApplicant(request, response) {
             });
           }
         } else {
-          // telegram.client.destroy();
           await telegram.client.invoke(new telegram.Api.auth.LogOut({}));
           return response.json({
             success: false,
@@ -80,7 +76,6 @@ async function loginApplicant(request, response) {
     });
     const isUserAuthorized = await telegram.client.isUserAuthorized();
     if (isUserAuthorized) {
-      // telegram.client.destroy();
       await telegram.client.invoke(new telegram.Api.auth.LogOut({}));
       const existingApplicant =
         await queries.getApplicantByPhone(applicantPhoneNumber);
