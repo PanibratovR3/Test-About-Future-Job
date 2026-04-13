@@ -4,8 +4,8 @@ const telegram = require("../config/telegram");
 
 async function requestPhoneCode(request, response) {
   try {
+    console.trace();
     const { applicantPhoneNumber } = request.body;
-    await telegram.client.connect();
     await telegram.client.sendCode(
       {
         apiId: parseInt(process.env.API_ID),
@@ -24,6 +24,7 @@ async function requestPhoneCode(request, response) {
 
 async function loginApplicant(request, response) {
   try {
+    console.trace();
     const {
       applicantFullName,
       applicantPhoneNumber,
@@ -40,7 +41,8 @@ async function loginApplicant(request, response) {
       phoneCode: async () => applicantPhoneCode,
       onError: async (error) => {
         if (error.message === "Password is empty") {
-          telegram.client.destroy();
+          await telegram.client.invoke(new telegram.Api.auth.LogOut({}));
+          // telegram.client.destroy();
           const existingApplicant =
             await queries.getApplicantByPhone(applicantPhoneNumber);
           if (existingApplicant.length > 0) {
@@ -67,7 +69,8 @@ async function loginApplicant(request, response) {
             });
           }
         } else {
-          telegram.client.destroy();
+          // telegram.client.destroy();
+          await telegram.client.invoke(new telegram.Api.auth.LogOut({}));
           return response.json({
             success: false,
             reason: "Сталася помилка під час реєстрації.",
@@ -77,7 +80,8 @@ async function loginApplicant(request, response) {
     });
     const isUserAuthorized = await telegram.client.isUserAuthorized();
     if (isUserAuthorized) {
-      telegram.client.destroy();
+      // telegram.client.destroy();
+      await telegram.client.invoke(new telegram.Api.auth.LogOut({}));
       const existingApplicant =
         await queries.getApplicantByPhone(applicantPhoneNumber);
       if (existingApplicant.length > 0) {

@@ -2,8 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const applicantRouter = require("./routes/applicantRouter");
 const createTable = require("./db/createTable");
+const connectTelegram = require("./config/connect");
 require("dotenv").config({ quiet: true });
 
+connectTelegram();
 createTable();
 
 const app = express();
