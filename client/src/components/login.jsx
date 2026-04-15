@@ -11,6 +11,10 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -25,6 +29,9 @@ function Login() {
     useState(true);
   const [password, setPassword] = useState("");
   const [serverError, setServerError] = useState(null);
+  const [showDialog, setShowDialog] = useState(false);
+  const [phoneCode, setPhoneCode] = useState("");
+  const [phoneCodeCorrectFlag, setPhoneCodeCorrectFlag] = useState(true);
   const PHONELIMIT = 13;
   const INPUTPHONELIMIT = 12;
   const PHONECODELIMIT = 5;
@@ -39,6 +46,10 @@ function Login() {
   const handlePasswordInputChange = (event) => {
     setPassword(event.target.value);
   };
+  const handlePhoneCodeChange = (event) => {
+    setPhoneCode(event.target.value);
+  };
+  const handleClose = () => setShowDialog(false);
   function handleSubmit() {
     const checkAllRequiredFields =
       !!phoneNumber &&
@@ -59,75 +70,70 @@ function Login() {
           }
           return response.json();
         })
-        .catch((error) => setServerError(error.message));
-      const phoneCode = prompt(
-        "На ваш аккаунт було надіслано код з 5 цифр. Введіть його, будь-ласка.",
-      );
-      if (
-        phoneCode &&
-        !isNaN(Number(phoneCode)) &&
-        phoneCode.length === PHONECODELIMIT
-      ) {
-        fetch("http://localhost:5000/api/applicant/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            applicantFullName: requiredFormInputs.fullName,
-            applicantPhoneNumber: phoneNumber,
-            applicantDateOfBirth: requiredFormInputs.dateOfBirth,
-            applicantCity: requiredFormInputs.city,
-            applicantSchool: requiredFormInputs.school,
-            applicantStudyingStatus: requiredFormInputs.studyingStatus,
-            applicantPassword: password,
-            applicantPhoneCode: phoneCode,
-          }),
+        .then((response) => {
+          if (response.success) {
+            setShowDialog(true);
+          }
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Помилка сервера.");
-            }
-            return response.json();
-          })
-          .then((response) => {
-            if (response.success) {
-              if (
-                "hasCompletedTest" in response &&
-                !response.hasCompletedTest
-              ) {
-                localStorage.setItem(
-                  "applicantId",
-                  String(response.applicantId),
-                );
-                localStorage.setItem("studyingStatus", response.studyingStatus);
-                navigate("/test");
-              } else if (
-                "hasCompletedTest" in response &&
-                response.hasCompletedTest
-              ) {
-                localStorage.setItem(
-                  "applicantId",
-                  String(response.applicantId),
-                );
-                localStorage.setItem("studyingStatus", response.studyingStatus);
-                navigate("/results");
-              } else {
-                localStorage.setItem(
-                  "applicantId",
-                  String(response.applicantId),
-                );
-                localStorage.setItem("studyingStatus", response.studyingStatus);
-                navigate("/test");
-              }
+        .catch((error) => setServerError(error.message));
+    }
+  }
+  function handleFinalSubmit() {
+    const phoneCodeCheck =
+      phoneCode &&
+      !isNaN(Number(phoneCode)) &&
+      phoneCode.length === PHONECODELIMIT;
+    setPhoneCodeCorrectFlag(phoneCodeCheck);
+    if (phoneCodeCheck) {
+      fetch("http://localhost:5000/api/applicant/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          applicantFullName: requiredFormInputs.fullName,
+          applicantPhoneNumber: phoneNumber,
+          applicantDateOfBirth: requiredFormInputs.dateOfBirth,
+          applicantCity: requiredFormInputs.city,
+          applicantSchool: requiredFormInputs.school,
+          applicantStudyingStatus: requiredFormInputs.studyingStatus,
+          applicantPassword: password,
+          applicantPhoneCode: phoneCode,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Помилка сервера.");
+          }
+          return response.json();
+        })
+        .then((response) => {
+          if (response.success) {
+            if ("hasCompletedTest" in response && !response.hasCompletedTest) {
+              localStorage.setItem("applicantId", String(response.applicantId));
+              localStorage.setItem("studyingStatus", response.studyingStatus);
+              navigate("/test");
+            } else if (
+              "hasCompletedTest" in response &&
+              response.hasCompletedTest
+            ) {
+              localStorage.setItem("applicantId", String(response.applicantId));
+              localStorage.setItem("studyingStatus", response.studyingStatus);
+              navigate("/results");
             } else {
-              setServerError(response.reason);
+              localStorage.setItem("applicantId", String(response.applicantId));
+              localStorage.setItem("studyingStatus", response.studyingStatus);
+              navigate("/test");
             }
-          })
-          .catch((error) => setServerError(error.message));
-      } else {
-        setServerError("Не надано код, отриманого з аккаунту Telegram.");
-      }
+          } else {
+            setShowDialog(false);
+            setServerError(response.reason);
+          }
+        })
+        .catch((error) => {
+          setShowDialog(false);
+          setServerError(error.message);
+        });
     }
   }
   return (
@@ -273,120 +279,37 @@ function Login() {
             від аккаунту Telegram з метою підтвердження особистості
           </FormHelperText>
         </FormControl>
-        <Button variant="contained">Зареєструватися і почати тест</Button>
+        <Button variant="contained" onClick={handleSubmit}>
+          Зареєструватися
+        </Button>
+        <FormHelperText sx={{ color: "red", textAlign: "center" }}>
+          {!!serverError ? serverError : ""}
+        </FormHelperText>
       </Stack>
-      {/* <div className="form-row">
-        <label htmlFor="fullName">
-          ПІБ:<span className="required">*</span>{" "}
-        </label>
-        <input
-          id="fullName"
-          name="fullName"
-          value={requiredFormInputs.fullName}
-          onChange={handleRequiredFormInputChange}
-          placeholder="Іванов Іван Іванович"
-        />
-      </div>
-      <div className="form-row">
-        <label htmlFor="phoneNumber">
-          Номер телефону:<span className="required">*</span>
-        </label>
-        <PhoneInput
-          id="phoneNumber"
-          placeholder="0XX XXX XXXX"
-          value={phoneNumber}
-          name="phoneNumber"
-          defaultCountry="UA"
-          onChange={setPhoneNumber}
-          maxLength={INPUTPHONELIMIT}
-        />
-      </div>
-      <div className="form-row">
-        <label htmlFor="dateOfBirth">
-          Дата народження:<span className="required">*</span>{" "}
-        </label>
-        <input
-          type="date"
-          id="dateOfBirth"
-          name="dateOfBirth"
-          value={requiredFormInputs.dateOfBirth}
-          onChange={handleRequiredFormInputChange}
-          placeholder="Іванов Іван Іванович"
-        />
-      </div>
-      <div className="form-row">
-        <label htmlFor="city">
-          Місто:<span className="required">*</span>{" "}
-        </label>
-        <input
-          id="city"
-          name="city"
-          value={requiredFormInputs.city}
-          onChange={handleRequiredFormInputChange}
-        />
-      </div>
-      <div className="form-row">
-        <label htmlFor="school">
-          Школа, де ви навчалися (навчаєтесь):
-          <span className="required">*</span>{" "}
-        </label>
-        <input
-          id="school"
-          name="school"
-          value={requiredFormInputs.school}
-          onChange={handleRequiredFormInputChange}
-        />
-      </div>
-      <div className="form-row">
-        <label htmlFor="studyingStatus">
-          Статус навчання:<span className="required">*</span>
-        </label>
-        <select
-          value={requiredFormInputs.studyingStatus}
-          onChange={handleRequiredFormInputChange}
-          id="studyingStatus"
-          name="studyingStatus"
-        >
-          <option value={""}>Не обрано</option>
-          <option value={"Studying in 6th grade"}>Навчаюсь в 6-му класі</option>
-          <option value={"Studying in 7th grade"}>Навчаюсь в 7-му класі</option>
-          <option value={"Studying in 8th grade"}>Навчаюсь в 8-му класі</option>
-          <option value={"Studying in 9th grade"}>Навчаюсь в 9-му класі</option>
-          <option value={"Studying in 10th grade"}>
-            Навчаюсь в 10-му класі
-          </option>
-          <option value={"Studying in 11th grade"}>
-            Навчаюсь в 11-му класі
-          </option>
-          <option value={"Graduated"}>Випускник</option>
-        </select>
-      </div>
-      <div className="form-row">
-        <label htmlFor="password">
-          Пароль<sup>1</sup>:
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          value={password}
-          onChange={handlePasswordInputChange}
-        />
-      </div>
-      <div className="error-field">
-        {!allRequiredFieldsNotEmptyFlag &&
-          "Усі обов'язкові поля мають бути заповнені."}
-      </div>
-      <div className="server-error-field">{serverError ? serverError : ""}</div>
-      <div className="form-row-button">
-        <button onClick={handleSubmit}>Зареєструватися і почати тест</button>
-      </div>
-      <div className="information">
-        <span className="required">*</span> - обов'язковe до заповнення
-      </div>
-      <div className="information">
-        1 - від аккаунту Telegram з метою підтвердження особистості
-      </div> */}
+      <Dialog open={showDialog} onClose={handleClose}>
+        <DialogTitle>
+          На ваш аккаунт було надіслано код з 5 цифр. Введіть його, будь-ласка.
+        </DialogTitle>
+        <DialogContent sx={{ display: "flex", justifyContent: "center" }}>
+          <TextField
+            name="phoneCode"
+            value={phoneCode}
+            onChange={handlePhoneCodeChange}
+            slotProps={{ htmlInput: { maxLength: PHONECODELIMIT } }}
+            error={!phoneCodeCorrectFlag}
+            helperText={
+              !phoneCodeCorrectFlag
+                ? "Код має складатися з 5 цифр і не містити літер."
+                : ""
+            }
+          />
+        </DialogContent>
+        <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
+          <Button variant="contained" onClick={handleFinalSubmit}>
+            Почати тест
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
