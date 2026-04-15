@@ -3,6 +3,14 @@ import { useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useNavigate } from "react-router-dom";
+import Stack from "@mui/material/Stack";
+import InputLabel from "@mui/material/InputLabel";
+import TextField from "@mui/material/TextField";
+import FormHelperText from "@mui/material/FormHelperText";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Button from "@mui/material/Button";
 
 function Login() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -124,7 +132,150 @@ function Login() {
   }
   return (
     <div>
-      <div className="form-row">
+      <Stack spacing={3}>
+        <TextField
+          name="fullName"
+          value={requiredFormInputs.fullName}
+          onChange={handleRequiredFormInputChange}
+          placeholder="Іванов Іван Іванович"
+          label="ПІБ"
+          error={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.fullName.length === 0
+          }
+          helperText={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.fullName.length === 0
+              ? "Не вказано повне ім'я."
+              : ""
+          }
+        />
+        <Stack direction="row" spacing={2}>
+          <InputLabel htmlFor="phoneNumber">Номер телефону:</InputLabel>
+          <PhoneInput
+            id="phoneNumber"
+            placeholder="0XX XXX XXXX"
+            value={phoneNumber}
+            name="phoneNumber"
+            defaultCountry="UA"
+            onChange={setPhoneNumber}
+            maxLength={INPUTPHONELIMIT}
+          />
+        </Stack>
+        <FormHelperText
+          component="span"
+          sx={{ color: "red", textAlign: "center" }}
+        >
+          {!allRequiredFieldsNotEmptyFlag &&
+          (phoneNumber.length === 0 || phoneNumber.length !== PHONELIMIT)
+            ? "Не вказано номер телефону."
+            : ""}
+        </FormHelperText>
+        <TextField
+          name="dateOfBirth"
+          value={requiredFormInputs.dateOfBirth}
+          onChange={handleRequiredFormInputChange}
+          type="date"
+          slotProps={{ inputLabel: { shrink: true } }}
+          label="Дата народження"
+          error={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.dateOfBirth.length === 0
+          }
+          helperText={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.dateOfBirth.length === 0
+              ? "Не вказано дату народження"
+              : ""
+          }
+        />
+        <TextField
+          name="city"
+          value={requiredFormInputs.city}
+          onChange={handleRequiredFormInputChange}
+          label="Місто"
+          error={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.city.length === 0
+          }
+          helperText={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.city.length === 0
+              ? "Не вказано місто."
+              : ""
+          }
+        />
+        <TextField
+          name="school"
+          value={requiredFormInputs.school}
+          onChange={handleRequiredFormInputChange}
+          label="Школа, де ви навчалися (або навчаєтесь)"
+          error={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.school.length === 0
+          }
+          helperText={
+            !allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.school.length === 0
+              ? "Не вказана школа."
+              : ""
+          }
+        />
+        <FormControl>
+          <InputLabel>Статус навчання</InputLabel>
+          <Select
+            name="studyingStatus"
+            value={requiredFormInputs.studyingStatus}
+            onChange={handleRequiredFormInputChange}
+            label="Статус навчання"
+            error={
+              !allRequiredFieldsNotEmptyFlag &&
+              requiredFormInputs.studyingStatus.length === 0
+            }
+          >
+            <MenuItem value="">Не обрано</MenuItem>
+            <MenuItem value={"Studying in 6th grade"}>
+              Навчаюсь в 6-му класі
+            </MenuItem>
+            <MenuItem value={"Studying in 7th grade"}>
+              Навчаюсь в 7-му класі
+            </MenuItem>
+            <MenuItem value={"Studying in 8th grade"}>
+              Навчаюсь в 8-му класі
+            </MenuItem>
+            <MenuItem value={"Studying in 9th grade"}>
+              Навчаюсь в 9-му класі
+            </MenuItem>
+            <MenuItem value={"Studying in 10th grade"}>
+              Навчаюсь в 10-му класі
+            </MenuItem>
+            <MenuItem value={"Studying in 11th grade"}>
+              Навчаюсь в 11-му класі
+            </MenuItem>
+            <MenuItem value={"Graduated"}>Випускник</MenuItem>
+          </Select>
+          <FormHelperText sx={{ color: "red" }}>
+            {!allRequiredFieldsNotEmptyFlag &&
+            requiredFormInputs.studyingStatus.length === 0
+              ? "Не вказаний статус навчання."
+              : ""}
+          </FormHelperText>
+        </FormControl>
+        <FormControl>
+          <TextField
+            name="password"
+            type="password"
+            label="Пароль"
+            value={password}
+            onChange={handlePasswordInputChange}
+          />
+          <FormHelperText>
+            від аккаунту Telegram з метою підтвердження особистості
+          </FormHelperText>
+        </FormControl>
+        <Button variant="contained">Зареєструватися і почати тест</Button>
+      </Stack>
+      {/* <div className="form-row">
         <label htmlFor="fullName">
           ПІБ:<span className="required">*</span>{" "}
         </label>
@@ -235,7 +386,7 @@ function Login() {
       </div>
       <div className="information">
         1 - від аккаунту Telegram з метою підтвердження особистості
-      </div>
+      </div> */}
     </div>
   );
 }
