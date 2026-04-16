@@ -1,4 +1,3 @@
-import "../styles/test.css";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import questionsAndAnswers from "../data/questionsAndAnswers";

@@ -1,6 +1,5 @@
 import weights from "../data/weights";
 import { useRef, useEffect, useState } from "react";
-import "../styles/results.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormHelperText from "@mui/material/FormHelperText";
 import Typography from "@mui/material/Typography";
