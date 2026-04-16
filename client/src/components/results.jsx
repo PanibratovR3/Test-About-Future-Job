@@ -1,6 +1,9 @@
 import weights from "../data/weights";
 import { useRef, useEffect, useState } from "react";
 import "../styles/results.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import FormHelperText from "@mui/material/FormHelperText";
+import Typography from "@mui/material/Typography";
 
 function Results() {
   const applicantId = Number(localStorage.getItem("applicantId"));
@@ -38,13 +41,22 @@ function Results() {
   if (loadingResultsFlag) {
     return (
       <div>
-        <p>Завантаження даних.</p>
+        <CircularProgress />
       </div>
     );
   } else if (resultsError) {
     return (
       <div>
-        <div className="results-server-error">{resultsError}</div>
+        <FormHelperText
+          sx={{
+            color: "red",
+            fontWeight: "bold",
+            textAlign: "center",
+            fontSize: 50,
+          }}
+        >
+          {resultsError}
+        </FormHelperText>
       </div>
     );
   } else {
@@ -59,13 +71,15 @@ function Results() {
     );
     return (
       <div>
-        <div className="results-main-header">Результати тесту.</div>
-        <div className="results-job-winner-text">
-          Ваша майбутня робота: {sortedJobsDesc[0].replaceAll("-", " ")}.
-        </div>
-        <div className="results-job-winner-text">
+        <Typography variant="h2" component="h2">
+          Результати тесту.
+        </Typography>
+        <Typography variant="body1" sx={{ fontSize: 20, fontStyle: "italic" }}>
+          Ваша майбутня робота: {sortedJobsDesc[0].replaceAll("-", " ")}
+        </Typography>
+        <Typography variant="body1" sx={{ fontSize: 20, fontStyle: "italic" }}>
           Або: {sortedJobsDesc[1].replaceAll("-", " ")}.
-        </div>
+        </Typography>
       </div>
     );
   }
